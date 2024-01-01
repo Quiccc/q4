@@ -5,10 +5,9 @@ import Footer from "./components/footer/footer";
 
 export default function Home() {
   return (
-    <body className="d-flex flex-column">
+    <div data-bs-theme="dark">
       <Header />
       <UsersTable />
-      <Footer />
-    </body>
+    </div>
   );
 }
