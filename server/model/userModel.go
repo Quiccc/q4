@@ -6,8 +6,8 @@ type User struct {
 	gorm.Model
 	FirstName string
 	LastName  string
-	Email     string
+	Email     string `gorm:"unique"`
 	Address   string
-	Phone     string
+	Phone     string `gorm:"unique"`
 	Position  string
 }
