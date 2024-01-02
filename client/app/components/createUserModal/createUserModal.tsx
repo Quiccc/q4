@@ -2,19 +2,20 @@ import styles from './createUserModal.module.css';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState, useEffect } from 'react';
 
-export default function CreateUserModal() {
+export default function CreateUserModal(props: any) {
   const [isCreaationSuccessful, setIsCreationSuccessful] = useState<boolean>(true);
+  const setFetchFlag = props.setFetchFlag;
 
   useEffect(() => {}, [isCreaationSuccessful]);
 
   function createUser(newUserCreds: any) {
     const newUser = {
-      firstName: newUserCreds.get('firstName'),
-      lastName: newUserCreds.get('lastName'),
-      email: newUserCreds.get('email'),
-      address: newUserCreds.get('address'),
-      phone: newUserCreds.get('phone'),
-      position: newUserCreds.get('position'),
+      firstName: newUserCreds.get('newFirstName'),
+      lastName: newUserCreds.get('newLastName'),
+      email: newUserCreds.get('newEmail'),
+      address: newUserCreds.get('newAddress'),
+      phone: newUserCreds.get('newPhone'),
+      position: newUserCreds.get('newPosition'),
     };
 
     const options = {
@@ -22,7 +23,7 @@ export default function CreateUserModal() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: 'NewRequest.',
+      body: 'Create User Request.',
     };
 
     const path = '/api/create-user?firstName=' + newUser.firstName + '&lastName=' + newUser.lastName + '&email=' + newUser.email + '&address=' + newUser.address + '&phone=' + newUser.phone + '&position=' + newUser.position;
@@ -32,10 +33,12 @@ export default function CreateUserModal() {
         console.log('User created!');
         setIsCreationSuccessful(true);
         document.getElementById('modalCloseAnchor')?.click();
+        setFetchFlag(true);
       } else {
         setIsCreationSuccessful(false);
         console.log('Email or phone already exists!');
       }
+      //TODO: Fix error handling here.
     });
   }
 
@@ -55,28 +58,28 @@ export default function CreateUserModal() {
               <div className="modal-body d-flex flex-column">
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>First & Last Name</span>
-                  <input type="text" id="firstName" name="firstName" aria-label="firstName" className="form-control" required />
-                  <input type="text" id="lastName" name="lastName" aria-label="lastName" className="form-control" required />
+                  <input type="text" id="newFirstName" name="newFirstName" aria-label="newFirstName" className="form-control" required />
+                  <input type="text" id="newLastName" name="newLastName" aria-label="newLastName" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Position</span>
-                  <input type="text" id="position" name="position" aria-label="position" className="form-control" required />
+                  <input type="text" id="newPosition" name="newPosition" aria-label="newPosition" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Email</span>
-                  <input type="text" id="email" name="email" aria-label="email" className="form-control" required />
+                  <input type="text" id="newEmail" name="newEmail" aria-label="newEmail" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Address</span>
-                  <input type="text" id="address" name="address" aria-label="address" className="form-control" required />
+                  <input type="text" id="newAddress" name="newAddress" aria-label="newAddress" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Phone</span>
-                  <input type="text" id="phone" name="phone" aria-label="phone" className="form-control" required />
+                  <input type="text" id="newPhone" name="newPhone" aria-label="newPhone" className="form-control" required />
                 </div>
                 {
                   isCreaationSuccessful == false ?(
-                    <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* Email or phone number already belogns to another user.</p>
+                    <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* Email or phone number already belongs to another user.</p>
                   )
                   : null
                 }

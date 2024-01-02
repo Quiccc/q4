@@ -1,4 +1,28 @@
-.tableButton{
+.modalOpenButton{
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-weight: bold !important;
+}
+.modalText{
+    font-family: Arial, Helvetica, sans-serif   !important;
+    color: #dee2e6 !important;
+}
+.modalButton{
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-weight: 550 !important;
+    background-color:#673AB7 !important;
+    color: #dee2e6 !important;
+}
+.modalButton:hover,
+.modalButton:focus {
+  background-color: #945af7 !important;
+}
+.modalSpan{
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-weight: 550 !important;
+    background-color: #5b31a3 !important;
+}
+.modalErrorText{
     font-family: Arial, Helvetica, sans-serif;
+    color: #fa3737;
     font-weight: bold;
 }

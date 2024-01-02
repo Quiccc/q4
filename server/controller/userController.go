@@ -4,6 +4,8 @@ import (
 	"fill-labs/q4/server/initializers"
 	"fill-labs/q4/server/model"
 	"strconv"
+	s "strings"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -95,23 +97,24 @@ func UpdateUser(c *gin.Context, id string, firstName string, lastName string, em
 	c.JSON(200, "User updated")
 }
 
-func DeleteUser(c *gin.Context, id string) {
+func DeleteUsers(c *gin.Context, idStr string) {
 	db := initializers.DatabaseConnection()
 
-	var user model.User
-	oldUser := db.First(&user, id)
+	ids := s.Split(idStr, " ")
+	var users []model.User
+	deletedUsers := db.Find(&users, ids)
 
-	if oldUser.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "User not found"})
+	if deletedUsers.RowsAffected == 0 {
+		c.JSON(404, gin.H{"error": "User(s) not found"})
 		return
 	}
 
-	if oldUser.Error != nil {
-		c.JSON(500, gin.H{"error": oldUser.Error})
+	if deletedUsers.Error != nil {
+		c.JSON(500, gin.H{"error": deletedUsers.Error})
 		return
 	}
 
-	db.Delete(&model.User{}, id)
+	db.Delete(&users, ids)
 
 	c.JSON(200, gin.H{"message": "User deleted"})
 }

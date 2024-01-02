@@ -1,37 +1,10 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import styles from './usersTable.module.css';
-import CreateUserModal from '../createUserModal/createUserModal';
-import EditUserModal from '../editUserModal/editUserModal';
 
-export default function UsersTable() {
-  const [selectedUsers, setSelecetedUsers] = useState<string[]>([]);
-  const [users, setUsers] = useState<
-    {
-      ID: string;
-      CreatedAt: Date;
-      UpdatedAt: Date;
-      DeletedAt: Date;
-      FirstName: string;
-      LastName: string;
-      Email: string;
-      Address: string;
-      Phone: string;
-      Position: string;
-    }[]
-  >([]);
+export default function UsersTable(props: any) {
 
-  useEffect(() => {
-    fetch('/api/get-users')
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
-
-  useEffect(() => {}, [selectedUsers]);
+  const users = props.users;
+  const selectedUsers = props.selectedUsers;
+  const setSelecetedUsers = props.setSelecetedUsers;
 
   const selectUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -48,56 +21,35 @@ export default function UsersTable() {
   };
 
   return (
-    <Container className="d-flex flex-column">
-      <div className="d-inline-flex mb-2">
-        <CreateUserModal />
-        {selectedUsers.length == 1 ? (
-          <EditUserModal />
-        ) : (
-          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`} disabled>
-            Edit <EditIcon />
-          </button>
-        )}
-        {selectedUsers.length >= 1 ? (
-          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`}>
-            Delete <DeleteForeverIcon />
-          </button>
-        ) : (
-          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`} disabled>
-            Delete <DeleteForeverIcon />
-          </button>
-        )}
-      </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Employee Name</th>
-            <th>Position</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Address</th>
+    <table className="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Employee Name</th>
+          <th>Position</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user: any) => (
+          <tr key={user.ID}>
+            <th>
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" value={user.ID} onChange={selectUser} id={user.ID} />
+              </div>
+            </th>
+            <td>
+              {user.FirstName} {user.LastName}
+            </td>
+            <td>{user.Position}</td>
+            <td>{user.Email}</td>
+            <td>{user.Phone}</td>
+            <td>{user.Address}</td>
           </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.ID}>
-              <th>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value={user.ID} onChange={selectUser} id={user.ID} />
-                </div>
-              </th>
-              <td>
-                {user.FirstName} {user.LastName}
-              </td>
-              <td>{user.Position}</td>
-              <td>{user.Email}</td>
-              <td>{user.Phone}</td>
-              <td>{user.Address}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Container>
+        ))}
+      </tbody>
+    </table>
   );
 }

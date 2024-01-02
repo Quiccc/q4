@@ -43,9 +43,9 @@ func setupRouter() *gin.Engine {
 		controller.UpdateUser(c, id, firstName, lastName, email, address, phone, position)
 	})
 
-	r.DELETE("/api/delete-user", func(c *gin.Context){
-		id := c.Query("id")
-		controller.DeleteUser(c, id)
+	r.DELETE("/api/delete-users", func(c *gin.Context){
+		ids := c.Query("ids")
+		controller.DeleteUsers(c, ids)
 	})
 
 	return r
