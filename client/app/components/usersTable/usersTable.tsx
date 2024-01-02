@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import styles from "./usersTable.module.css";
+import { useEffect, useState } from 'react';
+import { Container } from 'react-bootstrap';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import styles from './usersTable.module.css';
+import CreateUserModal from '../createUserModal/createUserModal';
+import EditUserModal from '../editUserModal/editUserModal';
 
 export default function UsersTable() {
   const [selectedUsers, setSelecetedUsers] = useState<string[]>([]);
@@ -25,60 +26,47 @@ export default function UsersTable() {
   >([]);
 
   useEffect(() => {
-    fetch("/api/get-users")
+    fetch('/api/get-users')
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
 
-  useEffect(() => {
-    
-  }, [selectedUsers])
+  useEffect(() => {}, [selectedUsers]);
 
   const selectUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       const updatedSelectedUsers = Object.assign([], selectedUsers);
       updatedSelectedUsers.push(e.target.value);
       setSelecetedUsers(updatedSelectedUsers);
-      console.log(updatedSelectedUsers)
-      console.log("checked")
     } else {
-      if(selectedUsers.indexOf(e.target.value) > -1) {
+      if (selectedUsers.indexOf(e.target.value) > -1) {
         const updatedSelectedUsers = Object.assign([], selectedUsers);
         updatedSelectedUsers.splice(selectedUsers.indexOf(e.target.value), 1);
         setSelecetedUsers(updatedSelectedUsers);
-        console.log("unchecked")
       }
     }
-  }
+  };
 
   return (
     <Container className="d-flex flex-column">
-      <div className="mb-2">
-        <button type="button" className={`${styles.tableButton} ${"btn btn-dark me-2"}`}>
-          New <AddCircleIcon />
-        </button>
-        {
-          selectedUsers.length == 1 ? (
-            <button type="button" className={`${styles.tableButton} ${"btn btn-dark me-2"}`}>
-              Edit <EditIcon />
-            </button>
-          ) : (
-            <button type="button" className={`${styles.tableButton} ${"btn btn-dark me-2"}`} disabled>
-              Edit <EditIcon />
-            </button>
-          )
-        }
-        {
-          selectedUsers.length >= 1 ? (
-            <button type="button" className={`${styles.tableButton} ${"btn btn-dark me-2"}`}>
+      <div className="d-inline-flex mb-2">
+        <CreateUserModal />
+        {selectedUsers.length == 1 ? (
+          <EditUserModal />
+        ) : (
+          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`} disabled>
+            Edit <EditIcon />
+          </button>
+        )}
+        {selectedUsers.length >= 1 ? (
+          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`}>
             Delete <DeleteForeverIcon />
           </button>
-          ) : (
-            <button type="button" className={`${styles.tableButton} ${"btn btn-dark me-2"}`} disabled>
+        ) : (
+          <button type="button" className={`${styles.tableButton} ${'btn btn-dark me-2'}`} disabled>
             Delete <DeleteForeverIcon />
           </button>
-          )
-        }
+        )}
       </div>
       <table className="table">
         <thead>
@@ -96,13 +84,7 @@ export default function UsersTable() {
             <tr key={user.ID}>
               <th>
                 <div className="form-check">
-                      <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value={user.ID}
-                    onChange={selectUser}
-                    id={user.ID}         
-                  />
+                  <input className="form-check-input" type="checkbox" value={user.ID} onChange={selectUser} id={user.ID} />
                 </div>
               </th>
               <td>
