@@ -31,7 +31,7 @@ export default function DeleteUser(props: any) {
 function toPathString(ids: number[]) {
   let pathString = '';
   for (let i = 0; i < ids.length; i++) {
-    pathString += ids[i] + '+';
+    pathString += ids[i] + '%20';
   }
   return pathString;
 }
