@@ -3,10 +3,10 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState, useEffect } from 'react';
 
 export default function CreateUserModal(props: any) {
-  const [isCreaationSuccessful, setIsCreationSuccessful] = useState<boolean>(true);
+  const [duplicateField, setDuplicateField] = useState("");
   const setFetchFlag = props.setFetchFlag;
 
-  useEffect(() => {}, [isCreaationSuccessful]);
+  useEffect(() => {}, [duplicateField]);
 
   function createUser(newUserCreds: any) {
     const newUser = {
@@ -15,31 +15,34 @@ export default function CreateUserModal(props: any) {
       email: newUserCreds.get('newEmail'),
       address: newUserCreds.get('newAddress'),
       phone: newUserCreds.get('newPhone'),
-      position: newUserCreds.get('newPosition'),
+      title: newUserCreds.get('newTitle'),
     };
 
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: 'Create User Request.',
-    };
+    const postCreatedUser = async () => {
+      const options = {
+        method: 'POST',
+      };
 
-    const path = '/api/create-user?firstName=' + newUser.firstName + '&lastName=' + newUser.lastName + '&email=' + newUser.email + '&address=' + newUser.address + '&phone=' + newUser.phone + '&position=' + newUser.position;
+      const path = '/api/create-user?firstName=' + newUser.firstName + '&lastName=' + newUser.lastName + '&email=' + newUser.email + '&address=' + newUser.address + '&phone=' + newUser.phone + '&title=' + newUser.title;
+      const response = await fetch(path, options);
 
-    fetch(path, options).then((response) => {
-      if (response.status == 200) {
-        console.log('User created!');
-        setIsCreationSuccessful(true);
-        document.getElementById('modalCloseAnchor')?.click();
-        setFetchFlag(true);
-      } else {
-        setIsCreationSuccessful(false);
-        console.log('Email or phone already exists!');
+      if (response.status == 500) {
+        const errorColumn = await response.json();
+        setDuplicateField(errorColumn.error.split('.')[1]);
+        return;
       }
-      //TODO: Fix error handling here.
-    });
+
+      document.getElementById('modalCloseAnchor')?.click();
+      console.log(response.status + ': User creation successful.');
+
+      setDuplicateField("");
+      setFetchFlag(true);     
+    };
+
+    postCreatedUser()
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -62,8 +65,8 @@ export default function CreateUserModal(props: any) {
                   <input type="text" id="newLastName" name="newLastName" aria-label="newLastName" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
-                  <span className={`${styles.modalSpan} ${'input-group-text'}`}>Position</span>
-                  <input type="text" id="newPosition" name="newPosition" aria-label="newPosition" className="form-control" required />
+                  <span className={`${styles.modalSpan} ${'input-group-text'}`}>Title</span>
+                  <input type="text" id="newTitle" name="newTitle" aria-label="newTitle" className="form-control" required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Email</span>
@@ -77,12 +80,7 @@ export default function CreateUserModal(props: any) {
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Phone</span>
                   <input type="text" id="newPhone" name="newPhone" aria-label="newPhone" className="form-control" required />
                 </div>
-                {
-                  isCreaationSuccessful == false ?(
-                    <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* Email or phone number already belongs to another user.</p>
-                  )
-                  : null
-                }
+                {duplicateField != "" ? <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* This {duplicateField + (duplicateField == "phone" ? (" number") : (" address "))} belongs to another user.</p> : null}
                 <button type="submit" className={`${styles.modalButton} ${'btn btn-dark'}`}>
                   Add
                 </button>

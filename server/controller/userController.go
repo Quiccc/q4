@@ -16,11 +16,11 @@ func GetAllUsers(c *gin.Context) {
 	result := db.Find(&users)
 
 	if result.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "No users found"})
+		c.AbortWithStatus(404)
 	}
 
 	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error})
+		c.AbortWithStatus(500)
 	}
 
 	c.JSON(200, users)
@@ -36,47 +36,54 @@ func GetUserById(c *gin.Context, id string) {
 	result := db.First(&user, userId)
 
 	if result.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "User not found"})
+		c.AbortWithStatus(404)
 		return
 	}
 
 	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error})
+		c.AbortWithStatus(500)
 		return
 	}
 
 	c.JSON(200, user)
 }
 
-func CreateUser(c *gin.Context, firstName string, lastName string, email string, address string, phone string, position string) {
+func CreateUser(c *gin.Context, firstName string, lastName string, email string, address string, phone string, title string) {
 	user := model.User{
 		FirstName: firstName,
 		LastName:  lastName,
 		Email:     email,
 		Address:   address,
 		Phone:     phone,
-		Position:  position,
+		Title:  title,
 	}
 
 	db := initializers.DatabaseConnection()
 	result := db.Create(&user)
 
 	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error})
+		uniquenessError := s.Split(result.Error.Error(), " ")
+
+		if uniquenessError[3] == "users.email" || uniquenessError[3] == "users.phone" {
+			c.JSON(500, gin.H{"error": uniquenessError[3]})
+			return
+		}
+
+		c.JSON(500, gin.H{"error": "Unexpected"})
 		return
 	}
 
 	c.JSON(200, user)
 }
 
-func UpdateUser(c *gin.Context, id string, firstName string, lastName string, email string, address string, phone string, position string) {
+func UpdateUser(c *gin.Context, id string, firstName string, lastName string, email string, address string, phone string, title string) {
 
 	db := initializers.DatabaseConnection()
 	var user model.User
 	oldUser := db.First(&user, id)
 
 	if oldUser.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "User not found"})
+		c.AbortWithStatus(404)
 		return
 	}
 
@@ -85,12 +92,19 @@ func UpdateUser(c *gin.Context, id string, firstName string, lastName string, em
 	user.Email = email
 	user.Address = address
 	user.Phone = phone
-	user.Position = position
+	user.Title = title
 
 	result := db.Save(&user)
 
 	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error})
+		uniquenessError := s.Split(result.Error.Error(), " ")
+
+		if uniquenessError[3] == "users.email" || uniquenessError[3] == "users.phone" {
+			c.JSON(500, gin.H{"error": uniquenessError[3]})
+			return
+		}
+
+		c.JSON(500, gin.H{"error": "Unexpected"})
 		return
 	}
 
@@ -105,16 +119,16 @@ func DeleteUsers(c *gin.Context, idStr string) {
 	deletedUsers := db.Find(&users, ids)
 
 	if deletedUsers.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "User(s) not found"})
+		c.AbortWithStatus(404)
 		return
 	}
 
 	if deletedUsers.Error != nil {
-		c.JSON(500, gin.H{"error": deletedUsers.Error})
+		c.AbortWithStatus(500)
 		return
 	}
 
 	db.Delete(&users, ids)
 
-	c.JSON(200, gin.H{"message": "User deleted"})
+	c.AbortWithStatus(200)
 }

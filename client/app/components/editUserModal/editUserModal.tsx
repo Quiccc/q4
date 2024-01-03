@@ -3,44 +3,45 @@ import styles from './editUserModal.module.css';
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function EditUserModal(props: any) {
-  const [isEditSuccessful, setIsEditSuccessful] = useState(true);
+  const [duplicateField, setDuplicateField] = useState("");
   const selectedUser = props.editedUser;
   const setFetchFlag = props.setFetchFlag;
 
   function editUser(editedUserCreds: any) {
     const editedUser = {
-    firstName: editedUserCreds.get('editedFirstName'),
-    lastName: editedUserCreds.get('editedLastName'),
-    position: editedUserCreds.get('editedPosition'),
-    email: editedUserCreds.get('editedEmail'),
-    address: editedUserCreds.get('editedAddress'),
-    phone: editedUserCreds.get('editedPhone')
+      firstName: editedUserCreds.get('editedFirstName'),
+      lastName: editedUserCreds.get('editedLastName'),
+      title: editedUserCreds.get('editedTitle'),
+      email: editedUserCreds.get('editedEmail'),
+      address: editedUserCreds.get('editedAddress'),
+      phone: editedUserCreds.get('editedPhone'),
     };
 
-    console.log(editedUser);
+    const putEditedUser = async () => {
+      const options = {
+        method: 'PUT',
+      };
 
-    const options = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: 'NewRequest.',
-    };
+      const path = '/api/update-user?id=' + selectedUser.ID + '&firstName=' + editedUser.firstName + '&lastName=' + editedUser.lastName + '&email=' + editedUser.email + '&address=' + editedUser.address + '&phone=' + editedUser.phone + '&title=' + editedUser.title;
+      const response = await fetch(path, options);
 
-    const path = '/api/update-user?id='+ selectedUser.ID +'&firstName=' + editedUser.firstName + '&lastName=' + editedUser.lastName + '&email=' + editedUser.email + '&address=' + editedUser.address + '&phone=' + editedUser.phone + '&position=' + editedUser.position;
-
-    fetch(path, options).then((response) => {
-      if (response.status == 200) {
-        console.log('User edited!');
-        setIsEditSuccessful(true);
-        document.getElementById('editModalCloseAnchor')?.click();
-        setFetchFlag(true);
-      } else {
-        setIsEditSuccessful(false);
-        console.log('Email or phone already exists!');
+      if (response.status == 500) {
+        const errorColumn = await response.json();
+        setDuplicateField(errorColumn.error.split('.')[1]);
+        return;
       }
-      //TODO: Fix error handling here.
-    });
+
+      document.getElementById('editModalCloseAnchor')?.click();
+      console.log(response.status + ': User edit successful.');
+
+      setDuplicateField("");
+      setFetchFlag(true);
+    };
+
+    putEditedUser()
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -59,12 +60,12 @@ export default function EditUserModal(props: any) {
               <div className="modal-body d-flex flex-column">
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>First & Last Name</span>
-                  <input type="text" id="editedFirstName" name="editedFirstName" aria-label="editedFirstName" className="form-control" defaultValue={selectedUser.FirstName}required />
+                  <input type="text" id="editedFirstName" name="editedFirstName" aria-label="editedFirstName" className="form-control" defaultValue={selectedUser.FirstName} required />
                   <input type="text" id="editededitedPastName" name="editedLastName" aria-label="editedLastName" className="form-control" defaultValue={selectedUser.LastName} required />
                 </div>
                 <div className="input-group mb-3">
-                  <span className={`${styles.modalSpan} ${'input-group-text'}`}>Position</span>
-                  <input type="text" id="editedPosition" name="editedPosition" aria-label="editedPosition" className="form-control" defaultValue={selectedUser.Position} required />
+                  <span className={`${styles.modalSpan} ${'input-group-text'}`}>Title</span>
+                  <input type="text" id="editedTitle" name="editedTitle" aria-label="editedTitle" className="form-control" defaultValue={selectedUser.Title} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Email</span>
@@ -78,13 +79,7 @@ export default function EditUserModal(props: any) {
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Phone</span>
                   <input type="text" id="editedPhone" name="editedPhone" aria-label="editedPhone" className="form-control" defaultValue={selectedUser.Phone} required />
                 </div>
-                {
-                  //Fix this
-                  isEditSuccessful == false ?(
-                    <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* Email or phone number already belongs to another user.</p>
-                  )
-                  : null
-                }
+                  {duplicateField != "" ? <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* This {duplicateField + (duplicateField == "phone" ? (" number") : (" address "))} belongs to another user.</p> : null}
                 <button type="submit" className={`${styles.modalButton} ${'btn btn-dark'}`}>
                   Edit
                 </button>

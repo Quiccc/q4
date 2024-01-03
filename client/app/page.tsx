@@ -26,25 +26,32 @@ export default function Home() {
       Email: string;
       Address: string;
       Phone: string;
-      Position: string;
+      Title: string;
     }[]
   >([]);
 
   useEffect(() => {
     if (fetchFlag) {
-      console.log('FETCHING');
-      fetch('/api/get-users')
-        .then((res) => {
-          if (res.status == 200) {
-            return res.json();
-          }
-          if (res.status == 404) {
-            return [];
-          }
-          // TODO: Handle 500
-        })
-        .then((data) => setUsers(data))
-      setFetchFlag(false);
+      const fetchUsers = async () => {
+        const res = await fetch('/api/get-users');
+        const data = await res.json();
+
+        if(data.length == 0){
+          setUsers([]);
+          return;
+        }
+        
+        console.log(res.status + ": Fetch successful.");
+        setUsers(data);
+      }
+
+      fetchUsers()
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {   
+        setFetchFlag(false);
+      })
     }
   }, [fetchFlag]);
 

@@ -26,7 +26,7 @@ export default function UsersTable(props: any) {
         <tr>
           <th></th>
           <th>Employee Name</th>
-          <th>Position</th>
+          <th>Title</th>
           <th>Email</th>
           <th>Phone Number</th>
           <th>Address</th>
@@ -43,7 +43,7 @@ export default function UsersTable(props: any) {
             <td>
               {user.FirstName} {user.LastName}
             </td>
-            <td>{user.Position}</td>
+            <td>{user.Title}</td>
             <td>{user.Email}</td>
             <td>{user.Phone}</td>
             <td>{user.Address}</td>

@@ -22,28 +22,28 @@ func setupRouter() *gin.Engine {
 		controller.GetUserById(c, id)
 	})
 
-	r.POST("/api/create-user", func(c *gin.Context){
+	r.POST("/api/create-user", func(c *gin.Context) {
 		firstName := c.Query("firstName")
 		lastName := c.Query("lastName")
 		email := c.Query("email")
 		address := c.Query("address")
 		phone := c.Query("phone")
-		position := c.Query("position")
-		controller.CreateUser(c, firstName, lastName, email, address, phone, position)
+		title := c.Query("title")
+		controller.CreateUser(c, firstName, lastName, email, address, phone, title)
 	})
 
-	r.PUT("/api/update-user", func(c *gin.Context){
+	r.PUT("/api/update-user", func(c *gin.Context) {
 		id := c.Query("id")
 		firstName := c.Query("firstName")
 		lastName := c.Query("lastName")
 		email := c.Query("email")
 		address := c.Query("address")
 		phone := c.Query("phone")
-		position := c.Query("position")
-		controller.UpdateUser(c, id, firstName, lastName, email, address, phone, position)
+		title := c.Query("title")
+		controller.UpdateUser(c, id, firstName, lastName, email, address, phone, title)
 	})
 
-	r.DELETE("/api/delete-users", func(c *gin.Context){
+	r.DELETE("/api/delete-users", func(c *gin.Context) {
 		ids := c.Query("ids")
 		controller.DeleteUsers(c, ids)
 	})
