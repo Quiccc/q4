@@ -1,5 +1,6 @@
 import styles from "./header.module.css";
 
+// Header component. Simple header with a logo, title and some text.
 export default function Header() {
   return (
     <div className={`${styles.header} ${"navbar-fixed-top"} ${"d-flex flex-column"}`}>

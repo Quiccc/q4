@@ -118,15 +118,15 @@ func CreateUser(c *gin.Context, firstName string, lastName string, email string,
 	//Status: 500 Handling
 	if result.Error != nil {
 
-		if result.RowsAffected == 0 {
-			c.JSON(404, gin.H{"error": "Table not found."})
-			return
-		}
-
 		//Unique constraint error handling
 		uniquenessError := s.Split(result.Error.Error(), " ")
 		if uniquenessError[3] == "users.email" || uniquenessError[3] == "users.phone" {
 			c.JSON(500, gin.H{"error": uniquenessError[3]})
+			return
+		}
+
+		if result.RowsAffected == 0 {
+			c.JSON(404, gin.H{"error": "Table not found."})
 			return
 		}
 
@@ -234,5 +234,5 @@ func DeleteUsers(c *gin.Context, idStr string) {
 	db.Delete(&users, ids) // Delete single or multiple users depending on the input.length
 
 	//OK
-	c.JSON(200, strconv.FormatInt(deletedUsers.RowsAffected, 10) + " User(s) deleted")
+	c.JSON(200, strconv.FormatInt(deletedUsers.RowsAffected, 10)+" User(s) deleted")
 }
