@@ -48,41 +48,6 @@ func GetAllUsers(c *gin.Context) {
 
 /*
 Function Description:
-This function handles the GET requests to the API.
-Fetches a single user from the database by ID
-sends a response with the appropriate status code and the user as a JSON.
-
-Params:
-c (*gin.Context): Context of the request.
-id (string): ID of the user to be fetched.
-
-Returns:
-void
-*/
-func GetUserById(c *gin.Context, id string) {
-
-	db := initializers.DatabaseConnection()
-	var user model.User
-
-	userId, _ := strconv.Atoi(id)
-
-	result := db.First(&user, userId)
-
-	if result.RowsAffected == 0 {
-		c.JSON(404, gin.H{"error": "No user found"})
-		return
-	}
-
-	if result.Error != nil {
-		c.JSON(500, gin.H{"error": "Unexpected"})
-		return
-	}
-
-	c.JSON(200, user)
-}
-
-/*
-Function Description:
 This function handles the POST requests to the API.
 Creates a new user in the database with the given parameters.
 sends a response with the appropriate status code
@@ -126,7 +91,7 @@ func CreateUser(c *gin.Context, firstName string, lastName string, email string,
 		}
 
 		if result.RowsAffected == 0 {
-			c.JSON(404, gin.H{"error": "Table not found."})
+			c.JSON(404, gin.H{"error": "NOT NULL constaint failed."})
 			return
 		}
 
@@ -191,6 +156,11 @@ func UpdateUser(c *gin.Context, id string, firstName string, lastName string, em
 
 		//Server error
 		c.JSON(500, gin.H{"error": "Unexpected"})
+		return
+	}
+
+	if result.RowsAffected == 0 {
+		c.JSON(404, gin.H{"error": "NOT NULL constaint failed."})
 		return
 	}
 

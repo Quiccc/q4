@@ -40,11 +40,6 @@ func setupRouter() *gin.Engine {
 	//Example request: http://localhost:3030/api/get-users
 	r.GET("/api/get-users", controller.GetAllUsers)
 
-	r.GET("/api/get-user", func(c *gin.Context) {
-		id := c.Query("id")
-		controller.GetUserById(c, id)
-	})
-
 	//Example request: http://localhost:3030/api/create-user?firstName=John&lastName=Doe&email=john.doe%40gmail.com&address=123%20Main%20St.%2C%20New%20York%2C%20NY%2C%2010001&phone=1234567890&title=Software%20Engineer
 	r.POST("/api/create-user", func(c *gin.Context) {
 		firstName := c.Query("firstName")
