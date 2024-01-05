@@ -1,8 +1,93 @@
-:root,
+@import "./node_modules/bootstrap/scss/bootstrap.scss";
+
+:root {
+  --form-control-color: #f5f5f5;
+  --form-control-disabled: #959495;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
-    background: #673AB7;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #512DA8, #673AB7);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
+  background: #673ab7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #512da8, #673ab7); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #512da8, #673ab7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   height: 100vh;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: none;
+  scrollbar-color: #dee2e6;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+  margin-left: 20px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #512da8;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #dee2e6;
+  border-radius: 10px;
+  border: 3px solid #dee2e6;
+}
+
+input[type="checkbox"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: var(--form-background);
+  /* Not removed via appearance */
+
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  /* Windows High Contrast Mode */
+  background-color: CanvasText;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
+input[type="checkbox"]:disabled {
+  --form-control-color: var(--form-control-disabled);
+
+  color: var(--form-control-disabled);
+  cursor: not-allowed;
+}
+
+$modal-fade-transform: scale(2) !default; 

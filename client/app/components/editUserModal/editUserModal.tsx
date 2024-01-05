@@ -69,11 +69,13 @@ export default function EditUserModal(props: any) {
       {/* Modal */}
       <div className="modal fade" id="editUserModal" tabIndex={-1} aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div className={`${styles.modalText} ${'modal-dialog modal-dialog-centered'}`}>
-          <div className="modal-content">
-            <p className="fs-1 ms-3 me-3 mt-4 mb-2" id="editUserModalLabel">
-              Edit a user.
-            </p>
-            <p className="fs-5 ms-3 me-3 mb-5">Change the information of a existing user.</p>
+          <div className="modal-content" style={{ borderColor: 'transparent' }}>
+            <div className={styles.modalText}>
+              <p className="fs-1 ms-3 me-3 mt-4 mb-2" id="editUserModalLabel">
+                Edit a user.
+              </p>
+              <p className="fs-5 ms-3 me-3">Change the information of a existing user.</p>
+            </div>
             <div className="modal-body d-flex flex-column">
               {/* Form to edit a user. */}
               <form action={editUser}>
@@ -81,28 +83,28 @@ export default function EditUserModal(props: any) {
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>First & Last Name</span>
                   {/* First and last name inputs. */}
-                  <input type="text" id="editedFirstName" name="editedFirstName" aria-label="editedFirstName" className="form-control" defaultValue={selectedUser.FirstName} required />
-                  <input type="text" id="editededitedPastName" name="editedLastName" aria-label="editedLastName" className="form-control" defaultValue={selectedUser.LastName} required />
+                  <input type="text" id="editedFirstName" name="editedFirstName" aria-label="editedFirstName" className={`${styles.formInput} ${'form-control'}`} defaultValue={selectedUser.FirstName} required />
+                  <input type="text" id="editededitedPastName" name="editedLastName" aria-label="editedLastName" className={`${styles.formInput} ${'form-control ms-1'}`} defaultValue={selectedUser.LastName} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Title</span>
                   {/* Title input. */}
-                  <input type="text" id="editedTitle" name="editedTitle" aria-label="editedTitle" className="form-control" defaultValue={selectedUser.Title} required />
+                  <input type="text" id="editedTitle" name="editedTitle" aria-label="editedTitle" className={`${styles.formInput} ${'form-control'}`} defaultValue={selectedUser.Title} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Email</span>
                   {/* Email input. */}
-                  <input type="text" id="editedEmail" name="editedEmail" aria-label="editedEmail" className="form-control" defaultValue={selectedUser.Email} required />
+                  <input type="text" id="editedEmail" name="editedEmail" aria-label="editedEmail" className={`${styles.formInput} ${'form-control'}`} defaultValue={selectedUser.Email} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Address</span>
                   {/* Address input. */}
-                  <input type="text" id="editedAddress" name="editedAddress" aria-label="editedAddress" className="form-control" defaultValue={selectedUser.Address} required />
+                  <input type="text" id="editedAddress" name="editedAddress" aria-label="editedAddress" className={`${styles.formInput} ${'form-control'}`} defaultValue={selectedUser.Address} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Phone</span>
                   {/* Phone input. */}
-                  <input type="text" id="editedPhone" name="editedPhone" aria-label="editedPhone" className="form-control" defaultValue={selectedUser.Phone} required />
+                  <input type="text" id="editedPhone" name="editedPhone" aria-label="editedPhone" className={`${styles.formInput} ${'form-control'}`} defaultValue={selectedUser.Phone} required />
                 </div>
                 {/* Error message for duplicate field. */}
                 {duplicateField != '' ? <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* This {duplicateField + (duplicateField == 'phone' ? ' number' : ' address ')} belongs to another user.</p> : null}

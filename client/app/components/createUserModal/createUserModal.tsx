@@ -1,3 +1,4 @@
+import { BorderAll } from '@mui/icons-material';
 import styles from './createUserModal.module.css';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState, useEffect } from 'react';
@@ -66,13 +67,15 @@ export default function CreateUserModal(props: any) {
         New <AddCircleIcon />
       </button>
       {/* Modal */}
-      <div className="modal fade" id="createUserModal" tabIndex={-1} aria-labelledby="createUserModalLabel" aria-hidden="true">
+      <div className="modal fade" role="dialog" id="createUserModal" tabIndex={-1} aria-labelledby="createUserModalLabel" aria-hidden="true">
         <div className={`${styles.modalText} ${'modal-dialog modal-dialog-centered'}`}>
-          <div className="modal-content">
-            <p className="fs-1 ms-3 me-3 mt-4 mb-2" id="createUserModalLabel">
-              Create a user.
-            </p>
-            <p className="fs-5 ms-3 me-3 mb-5">Fill every field to add a new user to the system.</p>
+          <div className="modal-content" style={{ borderColor: 'transparent' }}>
+            <div className={styles.modalText}>
+              <p className="fs-1 ms-3 me-3 mt-4 mb-2" id="createUserModalLabel">
+                Create a user.
+              </p>
+              <p className="fs-5 ms-3 me-3">Fill every field to add a new user to the system.</p>
+            </div>
             <div className="modal-body d-flex flex-column">
               {/* Form to create a new user. */}
               <form action={createUser}>
@@ -80,28 +83,28 @@ export default function CreateUserModal(props: any) {
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>First & Last Name</span>
                   {/* First and last name inputs */}
-                  <input type="text" id="newFirstName" name="newFirstName" aria-label="newFirstName" className="form-control" required />
-                  <input type="text" id="newLastName" name="newLastName" aria-label="newLastName" className="form-control" required />
+                  <input type="text" id="newFirstName" name="newFirstName" aria-label="newFirstName" className={`${styles.formInput} ${'form-control'}`} required />
+                  <input type="text" id="newLastName" name="newLastName" aria-label="newLastName" className={`${styles.formInput} ${'form-control ms-1'}`} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Title</span>
                   {/* Title input */}
-                  <input type="text" id="newTitle" name="newTitle" aria-label="newTitle" className="form-control" required />
+                  <input type="text" id="newTitle" name="newTitle" aria-label="newTitle" className={`${styles.formInput} ${'form-control'}`} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Email</span>
                   {/* Email input */}
-                  <input type="text" id="newEmail" name="newEmail" aria-label="newEmail" className="form-control" required />
+                  <input type="text" id="newEmail" name="newEmail" aria-label="newEmail" className={`${styles.formInput} ${'form-control'}`} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Address</span>
                   {/* Address input */}
-                  <input type="text" id="newAddress" name="newAddress" aria-label="newAddress" className="form-control" required />
+                  <input type="text" id="newAddress" name="newAddress" aria-label="newAddress" className={`${styles.formInput} ${'form-control'}`} required />
                 </div>
                 <div className="input-group mb-3">
                   <span className={`${styles.modalSpan} ${'input-group-text'}`}>Phone</span>
                   {/* Phone input */}
-                  <input type="text" id="newPhone" name="newPhone" aria-label="newPhone" className="form-control" required />
+                  <input type="text" id="newPhone" name="newPhone" aria-label="newPhone" className={`${styles.formInput} ${'form-control'}`} required />
                 </div>
                 {/* Error message for duplicate field. */}
                 {duplicateField != '' ? <p className={`${styles.modalErrorText} ${'mt-4 mb-4'}`}>* This {duplicateField + (duplicateField == 'phone' ? ' number' : ' address ')} belongs to another user.</p> : null}

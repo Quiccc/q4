@@ -1,0 +1,8 @@
+.resultText {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #f5f5f5;
+  text-shadow: 3px 0px 7px rgba(81, 67, 21, 0.8), -3px 0px 7px rgba(81, 67, 21, 0.8), 0px 4px 7px rgba(81, 67, 21, 0.8);
+}
+.searchBar {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
